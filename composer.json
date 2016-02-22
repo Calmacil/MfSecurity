@@ -1,0 +1,25 @@
+{
+  "name": "calmacil/mfsecurity",
+  "version": "0.1.0.0-dev",
+  "authors": [
+    {
+      "name": "Calmacil",
+      "email": "thomas.lenoel@gmail.com"
+    }
+  ],
+  "description": "A security module for the Calmacil/Mf framework",
+  "require-dev": {
+    "calmacil/mf" : ">=4.2@dev"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "file:///home/calmacil/dev-web/Mf"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Calma\\Mf\\Security\\": "src"
+    }
+  }
+}
