@@ -86,4 +86,13 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
     {
         return $this->user ? $this->user->isAuth() : false;
     }
+    
+    /**
+     * Returns the current user.
+     * @return \Calma\Mf\Security\User\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }
