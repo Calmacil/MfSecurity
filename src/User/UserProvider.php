@@ -6,7 +6,7 @@
  * @licence MIT
  */
 
-namespace Calma\Mf\Security;
+namespace Calma\Mf\Security\User;
 
 /**
  * Class UserProvider

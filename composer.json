@@ -1,6 +1,6 @@
 {
   "name": "calmacil/mfsecurity",
-  "version": "0.1.1.0-dev",
+  "version": "0.1.2.0-dev",
   "authors": [
     {
       "name": "Calmacil",
@@ -9,12 +9,12 @@
   ],
   "description": "A security module for the Calmacil/Mf framework",
   "require-dev": {
-    "calmacil/mf" : ">=4.2@dev"
+    "calmacil/mf" : ">=4.3@dev"
   },
   "repositories": [
     {
       "type": "git",
-      "url": "file:///home/calmacil/dev-web/Mf"
+      "url": "https://github.com/Calmacil/Mf"
     }
   ],
   "autoload": {
