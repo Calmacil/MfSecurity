@@ -62,8 +62,30 @@ class UserProvider implements UserProviderInterface
         }
     }
 
+    /**
+     * @param string $username
+     * @return Calma\Mf\Security\User\User
+     */
     public function getUser($username)
     {
         return $this->provider_real->getUser($username);
+    }
+    
+    /**
+     * @param Calma\Mf\Security\User\User $user
+     * @return mixed
+     */
+    public function createUser($user)
+    {
+        return $this->provider_real->createUser($user);
+    }
+    
+    /**
+     * @param Calma\Mf\Security\User\User $user The user
+     * @return bool
+     */
+    public function updateUser($user)
+    {
+        return $this->provider_real->updateUser($user);
     }
 }

@@ -24,7 +24,13 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
      */
     private $options;
     
+    /**
+     * @var Calma\Mf\Security\User\User
+     */
     private $user;
+    
+    /** @var Calma\Mf\Security\User\UserProvider
+    private $user_provider;
     
     /**
      * SecurityPlugin contructor.

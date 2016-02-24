@@ -16,4 +16,16 @@ interface UserProviderInterface
      * @return User
      */
     public function getUser($username);
+    
+    /**
+     * @param Calma\Mf\Security\User\User
+     * @return mixed the user unique ID
+     */
+    public function createUser($user);
+    
+    /**
+     * @param Calma\Mf\Security\User\User
+     * @return bool success
+     */
+    public function updateUser($user);
 }

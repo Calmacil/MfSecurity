@@ -14,10 +14,12 @@ use Calma\Mf\DataObject;
 class User extends DataObject
 {
     /* DB fields */
+    protected $_user_id;
     protected $_username;
     protected $_password;
     protected $_salt;
     protected $_email;
+    protected $_role;
     protected $_created_at;
     protected $_updated_at;
     
