@@ -15,7 +15,7 @@ use Calma\Mf\Security\User\UserProvider;
 class SecurityPlugin implements PluginInterface, PluginStartInterface
 {
     /**
-     * @var Calma\Mf\Application
+     * @var \Calma\Mf\Application
      */
     private $app;
     
@@ -25,17 +25,17 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
     private $options;
     
     /**
-     * @var Calma\Mf\Security\User\User
+     * @var \Calma\Mf\Security\User\User
      */
     private $user;
     
-    /** @var Calma\Mf\Security\User\UserProvider
+    /** @var \Calma\Mf\Security\User\UserProvider
     private $user_provider;
     
     /**
      * SecurityPlugin contructor.
      * 
-     * @param Calma\Mf\Application $app
+     * @param \Calma\Mf\Application $app
      * @param mixed $option  The Config->settings->security content
      */
     public function __construct(&$app, $options)
