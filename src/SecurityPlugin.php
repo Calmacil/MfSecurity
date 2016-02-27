@@ -10,6 +10,7 @@ namespace Calma\Mf\Security;
 
 use Calma\Mf\Plugin\PluginInterface;
 use Calma\Mf\Plugin\PluginStartInterface;
+use Calma\Mf\Security\User\User;
 use Calma\Mf\Security\User\UserProvider;
 
 class SecurityPlugin implements PluginInterface, PluginStartInterface
@@ -45,12 +46,29 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
     }
     
     /**
-     * Retrives logged in user if exist
+     * Retrieves logged in user if exist
      */
     public function start()
     {
+        $this->user = new User;
         if (($user = $this->app['session']->get('user'))) {
             $this->user = $user;
+        }
+    }
+
+    /**
+     * Checks for credentials
+     *
+     * Controller is already instantiated
+     */
+    public function before()
+    {
+        if (property_exists($this->app->getController(), 'credentials')) {
+            $action = $this->app->getRequest()->getAction();
+
+            if (!$this->hasCredentials($this->user, $this->app->getController()->credentials[$action])) {
+                $this->app->getResponse()->display403();
+            }
         }
     }
     
@@ -82,6 +100,17 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
         $this->app['session']->set('user', $this->user);
         
         return true;
+    }
+
+    /**
+     * Checks if the given user has requested credentials
+     * @param User $user
+     * @param array|string $credentials
+     * @return bool
+     */
+    public function hasCredentials($user, $credentials)
+    {
+        return $user->hasCredentials($credentials);
     }
     
     /**

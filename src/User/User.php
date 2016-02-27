@@ -44,4 +44,21 @@ class User extends DataObject
     {
         $this->auth = $auth;
     }
+
+    /**
+     * @param array|string $credentials     A single role or an array of roles, returns true if at least one matches
+     * @return bool
+     */
+    public function hasCredentials($credentials)
+    {
+        if (is_string($credentials)) {
+            return $this->_role == $credentials;
+        }
+
+        if (is_array($credentials)) {
+            return in_array($this->_role, $credentials);
+        }
+
+        return false;
+    }
 }
