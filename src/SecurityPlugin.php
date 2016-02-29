@@ -63,10 +63,12 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
      */
     public function before()
     {
+        $this->app->coreLogger()->addDebug("Checking for User session...");
         if (property_exists($this->app->getController(), 'credentials')) {
             $action = $this->app->getRequest()->getAction();
 
             if (!$this->hasCredentials($this->user, $this->app->getController()->credentials[$action])) {
+                $this->app->coreLogger()->addDebug("User is not authentified, access denied.");
                 $this->app->getResponse()->display403();
             }
         }
