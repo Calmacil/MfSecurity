@@ -106,7 +106,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
 
     public function logout()
     {
-        $this->app['session']->unset('user');
+        $this->app['session']->remove('user');
     }
 
     /**
