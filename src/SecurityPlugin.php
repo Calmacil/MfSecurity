@@ -104,6 +104,11 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
         return true;
     }
 
+    public function logout()
+    {
+        $this->app['session']->unset('user');
+    }
+
     /**
      * Checks if the given user has requested credentials
      * @param User $user
