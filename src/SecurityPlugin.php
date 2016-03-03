@@ -43,6 +43,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
     {
         $this->app = $app;
         $this->options = $options;
+        $this->app->coreLogger()->addNotice("Security Plugin initialized.");
     }
     
     /**
