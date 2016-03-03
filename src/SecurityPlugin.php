@@ -10,10 +10,11 @@ namespace Calma\Mf\Security;
 
 use Calma\Mf\Plugin\PluginInterface;
 use Calma\Mf\Plugin\PluginStartInterface;
+use Calma\Mf\Plugin\PluginBeforeInterface;
 use Calma\Mf\Security\User\User;
 use Calma\Mf\Security\User\UserProvider;
 
-class SecurityPlugin implements PluginInterface, PluginStartInterface
+class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBeforeInterface
 {
     /**
      * @var \Calma\Mf\Application
