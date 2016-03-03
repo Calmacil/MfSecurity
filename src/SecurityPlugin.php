@@ -71,7 +71,9 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface
                 $this->app->coreLogger()->addInfo("User is not authentified, access denied.");
                 $this->app->getResponse()->display403();
             }
+            $this->app->coreLogger()->addInfo("User authentified, access granted.");
         }
+        $this->app->coreLogger()->addInfo("Open area, go on.");
     }
     
     /**
