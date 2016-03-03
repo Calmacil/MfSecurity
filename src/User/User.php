@@ -52,7 +52,7 @@ class User extends DataObject
     public function hasCredentials($credentials)
     {
         if (is_string($credentials)) {
-            return $this->_role == $credentials;
+            return ($this->_role === $credentials);
         }
 
         if (is_array($credentials)) {
