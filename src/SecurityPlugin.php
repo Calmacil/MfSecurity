@@ -69,7 +69,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
         if (property_exists($this->app->getController(), 'credentials')) {
             $action = $this->app->getRequest()->getAction();
 
-            if (in_array($action, $this->app->getController()->credentials)) {
+            if (array_key_exists($action, $this->app->getController()->credentials)) {
 
                 if (!$this->hasCredentials($this->user, $this->app->getController()->credentials[$action])) {
                     $this->app->coreLogger()->addInfo("User is not authentified, access denied.");
