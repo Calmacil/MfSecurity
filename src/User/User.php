@@ -61,4 +61,72 @@ class User extends DataObject
 
         return false;
     }
+
+    /**
+     * @param \PDO $dbh
+     * @return bool
+     */
+    public function create($dbh)
+    {
+        $query = "INSERT INTO :tbname (`username`, `password`, `salt`, `role`, `created_at`)
+                VALUES (:uname, :pwd, :salt, :role, CURRENT_TIME)";
+
+        $stmt = $dbh->prepare($query);
+
+        $stmt->bindValue(':uname', $this->username);
+        $stmt->bindValue(':pwd', $this->password);
+        $stmt->bindValue(':salt', $this->salt);
+        $stmt->bindValue(':role', $this->role);
+
+        if (!$stmt->execute()) {
+            return false;
+        }
+
+        return $dbh->lastInsertId();
+    }
+
+    /**
+     * @param \PDO $dbh
+     * @return mixed
+     */
+    public function update($dbh)
+    {
+        $query = "UPDATE :tbname SET
+                `password` = :pwd, `role` = :role `updated_at` = CURRENT_TIME
+                WHERE `user_id` = :uid";
+        $stmt = $dbh->prepare($query);
+
+        $stmt->bindValue(':uname', $this->username);
+        $stmt->bindValue(':role', $this->role);
+        $stmt->bindValue(':uid', $this->user_id);
+
+        return $stmt->execute();
+    }
+
+    /**
+     * @param \PDO $dbh
+     * @param string $tablename
+     * @param string $username
+     * @return User
+     */
+    public static function getByUsername($dbh, $tablename, $username)
+    {
+        $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
+                FROM :tbname
+                WHERE `username` = :username";
+
+        $stmt = $dbh->prepare($query);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, __CLASS__);
+
+        $stmt->bindValue(':tbname', $tablename);
+        $stmt->bindValue(':username', $username);
+        $stmt->execute();
+
+        $u = $stmt->fetch();
+
+        if ($u instanceof User)
+            throw new \RuntimeException("Could not fetch User data in the right object");
+
+        return $u;
+    }
 }
