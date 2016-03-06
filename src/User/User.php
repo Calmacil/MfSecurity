@@ -116,7 +116,7 @@ class User extends DataObject
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
-        $stmt->setFetchMode(PDO::FETCH_CLASS, '\Calma\Mf\Security\User\User');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, __CLASS__);
 
         $stmt->bindValue(':tbname', $tablename);
         $stmt->bindValue(':username', $username);
