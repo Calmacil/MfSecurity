@@ -93,10 +93,10 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
      */
     public function login($username, $password)
     {
-        $this->app->coreLogger()->debug("Entering SecurityPlugin::login() function for $username and $password");
+        $this->app->coreLogger()->addDebug("Entering SecurityPlugin::login() function for $username and $password");
         $user_provider = new UserProvider($this->options);
         if (!($user = $user_provider->getUser($username))) {
-            $this->app->coreLogger()->debug("User {un} not found!", ['un'=>$username]);
+            $this->app->coreLogger()->addDebug("User {un} not found!", ['un'=>$username]);
             return false;
         }
         
@@ -104,7 +104,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
             hash($this->options->hashmethod, $password . $user->salt) :
             $password . $user->salt;
 
-        $this->app->coreLogger()->debug('Given: {given}, Waited: {waited}', ['given'=>$hash_pwd, 'waited'=>$user->password]);
+        $this->app->coreLogger()->addDebug('Given: {given}, Waited: {waited}', ['given'=>$hash_pwd, 'waited'=>$user->password]);
         
         if ($hash_pwd !== $user->password) {
             return false;
