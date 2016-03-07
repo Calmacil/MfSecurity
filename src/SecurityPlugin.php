@@ -101,6 +101,8 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
         $hash_pwd = isset($this->options->hashmethod) ?
             hash($this->options->hashmethod, $password . $user->salt) :
             $password . $user->salt;
+
+        $this->app->coreLogger()->debug('Given: {given}, Waited: {waited}', ['given'=>$hash_pwd, 'waited'=>$user->password]);
         
         if ($hash_pwd !== $user->password) {
             return false;
