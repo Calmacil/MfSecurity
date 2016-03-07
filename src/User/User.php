@@ -123,7 +123,7 @@ class User extends DataObject
         $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\User\User');
 
         $stmt->bindValue(':username', $username);
-        $stmt->execute();
+        if (!$stmt->execute()) return false;
 
         $u = $stmt->fetch() or die(\PDO::error_get_last());
 
