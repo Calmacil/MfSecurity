@@ -116,7 +116,7 @@ class User extends DataObject
     public static function getByUsername($dbh, $tablename, $username)
     {
         $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
-                FROM $tablename
+                FROM ".$tablename."
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
@@ -129,6 +129,7 @@ class User extends DataObject
 
         if ($u instanceof User)
             throw new \RuntimeException("Could not fetch User data in the right object");
+        var_dump($u);
 
         return $u;
     }
