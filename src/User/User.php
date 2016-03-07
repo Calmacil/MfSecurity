@@ -10,6 +10,7 @@ namespace Calma\Mf\Security\User;
 
 
 use Calma\Mf\DataObject;
+use Calma\Mf\Config;
 
 class User extends DataObject
 {
@@ -68,7 +69,9 @@ class User extends DataObject
      */
     public function create($dbh)
     {
-        $query = "INSERT INTO :tbname (`username`, `password`, `salt`, `role`, `created_at`)
+        $tablename = Config::get('settings')->security->tablename;
+
+        $query = "INSERT INTO $tablename (`username`, `password`, `salt`, `role`, `created_at`)
                 VALUES (:uname, :pwd, :salt, :role, CURRENT_TIME)";
 
         $stmt = $dbh->prepare($query);
@@ -91,7 +94,8 @@ class User extends DataObject
      */
     public function update($dbh)
     {
-        $query = "UPDATE :tbname SET
+        $tablename = Config::get('settings')->security->tablename;
+        $query = "UPDATE $tablename SET
                 `password` = :pwd, `role` = :role `updated_at` = CURRENT_TIME
                 WHERE `user_id` = :uid";
         $stmt = $dbh->prepare($query);
@@ -112,13 +116,12 @@ class User extends DataObject
     public static function getByUsername($dbh, $tablename, $username)
     {
         $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
-                FROM :tbname
+                FROM $tablename
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
         $stmt->setFetchMode(\PDO::FETCH_CLASS, __CLASS__);
 
-        $stmt->bindValue(':tbname', $tablename);
         $stmt->bindValue(':username', $username);
         $stmt->execute();
 
