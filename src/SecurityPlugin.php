@@ -95,6 +95,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
     {
         $user_provider = new UserProvider($this->options);
         if (!($user = $user_provider->getUser($username))) {
+            $this->app->coreLogger()->debug("User {un} not found!", ['un'=>$username]);
             return false;
         }
         
