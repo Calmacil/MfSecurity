@@ -127,8 +127,10 @@ class User extends DataObject
 
         $u = $stmt->fetch();
 
-        if (!($u instanceof User))
-            throw new \RuntimeException("Could not fetch User data in the right object");
+        if (!($u instanceof User)) {
+            $c = get_class($u);
+            throw new \RuntimeException("Could not fetch User data in the right object: $c");
+        }
 
         return $u;
     }
