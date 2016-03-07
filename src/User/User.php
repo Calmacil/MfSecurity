@@ -113,12 +113,10 @@ class User extends DataObject
      * @param string $username
      * @return User
      */
-    public static function getByUsername($dbh, $username)
+    public static function getByUsername($dbh, $tableName, $username)
     {
-        $table_name = Config::get('settigs')->security->tablename;
-
         $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
-                FROM $table_name
+                FROM $tableName
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
