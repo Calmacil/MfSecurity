@@ -9,8 +9,8 @@
 namespace Calma\Mf\Security\User;
 
 
-use Calma\Mf\DataObject;
 use Calma\Mf\Config;
+use Calma\Mf\DataObject;
 
 class User extends DataObject
 {
@@ -113,19 +113,24 @@ class User extends DataObject
      * @param string $username
      * @return User
      */
-    public static function getByUsername($dbh, $tablename, $username)
+    public static function getByUsername($dbh, $username)
     {
+        $table_name = Config::get('settigs')->security->tablename;
+
         $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
-                FROM ".$tablename."
-                WHERE `username` = " . $dbh->quote($username);
+                FROM $table_name
+                WHERE `username` = :username";
 
-        $stmt = $dbh->query($query);//, \PDO::FETCH_CLASS, __CLASS__);
+        $stmt = $dbh->prepare($query);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, User);
 
-        $u = $stmt->fetchObject(__CLASS__);
+        $stmt->bindValue(':username', $username);
+        $stmt->execute();
 
-        if ($u instanceof User)
+        $u = $stmt->fetch();
+
+        if (!($u instanceof User))
             throw new \RuntimeException("Could not fetch User data in the right object");
-        var_dump($u);
 
         return $u;
     }
