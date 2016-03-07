@@ -9,9 +9,16 @@
 namespace Calma\Mf\Security\User;
 
 
+use Calma\Mf\Application;
+
 class SettingsUserProvider implements UserProviderInterface
 {
     private $users;
+
+    /**
+     * @var Application
+     */
+    private $app;
 
     /**
      * SettingsUserProvider constructor.
@@ -20,8 +27,10 @@ class SettingsUserProvider implements UserProviderInterface
      *
      * @param $users
      */
-    public function __construct($users)
+    public function __construct(&$app, $users)
     {
+        $this->app = $app;
+
         foreach ($users as $user) {
             $u = new User();
 

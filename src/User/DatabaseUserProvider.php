@@ -9,6 +9,7 @@
 namespace Calma\Mf\Security\User;
 
 
+use Calma\Mf\Application;
 use Calma\Mf\PdoProvider;
 
 class DatabaseUserProvider implements UserProviderInterface
@@ -16,10 +17,17 @@ class DatabaseUserProvider implements UserProviderInterface
     private $dbname;
     private $tablename;
 
-    public function __construct($dbname, $tablename)
+    /**
+     * @var Application;
+     */
+    private $app;
+
+    public function __construct(&$app, $dbname, $tablename)
     {
         $this->dbname = $dbname;
         $this->tablename = $tablename;
+
+        $this->app = $app;
     }
 
     /**
@@ -32,6 +40,7 @@ class DatabaseUserProvider implements UserProviderInterface
             $dbh = PdoProvider::getConnector($this->dbname);
             return User::getByUsername($dbh, $this->tablename, $username);
         } catch (\PDOException $e) {
+            $this->app->coreLogger()->error($e->getTraceAsString());
             return false;
         }
     }

@@ -27,6 +27,8 @@ class UserProvider implements UserProviderInterface
     private $dbname;
     private $tablename;
 
+    private $app;
+
 
     /**
      * @var UserProviderInterface
@@ -40,8 +42,9 @@ class UserProvider implements UserProviderInterface
      *
      * @param $options
      */
-    public function __construct($options)
+    public function __construct(&$app, $options)
     {
+        $this->app = $app;
         if (isset($options->provider))
             $this->provider = $options->provider;
         if (isset($options->hashmethod))
@@ -54,11 +57,11 @@ class UserProvider implements UserProviderInterface
         if ($this->provider == 'settings') {
             if (!isset($options->users))
                 throw new \RuntimeException("The specified users source is not provided.");
-            $this->provider_real = new SettingsUserProvider($options->users);
+            $this->provider_real = new SettingsUserProvider($this->app, $options->users);
         } elseif ($this->provider == 'database') {
             if (!$this->dbname || !$this->tablename)
                 throw new \RuntimeException("The specified users source is not provided.");
-            $this->provider_real = new DatabaseUserProvider($this->dbname, $this->tablename);
+            $this->provider_real = new DatabaseUserProvider($this->app, $this->dbname, $this->tablename);
         }
     }
 

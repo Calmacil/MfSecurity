@@ -94,7 +94,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
     public function login($username, $password)
     {
         $this->app->coreLogger()->addDebug("Entering SecurityPlugin::login() function for $username and $password");
-        $user_provider = new UserProvider($this->options);
+        $user_provider = new UserProvider($this->app, $this->options);
         if (!($user = $user_provider->getUser($username))) {
             $this->app->coreLogger()->addDebug("User {un} not found!", ['un'=>$username]);
             return false;
