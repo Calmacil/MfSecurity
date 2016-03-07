@@ -125,7 +125,7 @@ class User extends DataObject
         $stmt->bindValue(':username', $username);
         $stmt->execute();
 
-        $u = $stmt->fetch();
+        $u = $stmt->fetch() or die(error_get_last());
 
         if (!($u instanceof User)) {
             $c = get_class($u);
