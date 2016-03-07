@@ -43,6 +43,7 @@ class DatabaseUserProvider implements UserProviderInterface
             $this->app->coreLogger()->addDebug("Got user: {u}", ['u' => print_r($u, true)]);
             return $u;
         } catch (\PDOException $e) {
+            $this->app->coreLogger()->error($e->getMessage());
             $this->app->coreLogger()->error($e->getTraceAsString());
             return false;
         }
