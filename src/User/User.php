@@ -119,9 +119,9 @@ class User extends DataObject
                 FROM ".$tablename."
                 WHERE `username` = " . $dbh->quote($username);
 
-        $stmt = $dbh->query($query, \PDO::FETCH_CLASS, __CLASS__);
+        $stmt = $dbh->query($query);//, \PDO::FETCH_CLASS, __CLASS__);
 
-        $u = $stmt->fetch();
+        $u = $stmt->fetchObject(__CLASS__);
 
         if ($u instanceof User)
             throw new \RuntimeException("Could not fetch User data in the right object");
