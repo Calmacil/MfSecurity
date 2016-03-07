@@ -120,7 +120,7 @@ class User extends DataObject
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, User);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, __CLASS__);
 
         $stmt->bindValue(':username', $username);
         $stmt->execute();
