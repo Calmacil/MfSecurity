@@ -117,13 +117,9 @@ class User extends DataObject
     {
         $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
                 FROM ".$tablename."
-                WHERE `username` = :username";
+                WHERE `username` = " . $dbh->quote($username);
 
-        $stmt = $dbh->prepare($query);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, __CLASS__);
-
-        $stmt->bindValue(':username', $username);
-        $stmt->execute();
+        $stmt = $dbh->query($query, \PDO::FETCH_CLASS, __CLASS__);
 
         $u = $stmt->fetch();
 
