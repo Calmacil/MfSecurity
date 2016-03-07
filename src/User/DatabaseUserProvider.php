@@ -38,7 +38,10 @@ class DatabaseUserProvider implements UserProviderInterface
     {
         try {
             $dbh = PdoProvider::getConnector($this->dbname);
-            return User::getByUsername($dbh, $this->tablename, $username);
+            $this->app->coreLogger()->addDebug("Got DBH");
+            $u = User::getByUsername($dbh, $this->tablename, $username);
+            $this->app->coreLogger()->addDebug("Got user: {u}", ['u' => print_r($u, true)]);
+            return $u;
         } catch (\PDOException $e) {
             $this->app->coreLogger()->error($e->getTraceAsString());
             return false;
