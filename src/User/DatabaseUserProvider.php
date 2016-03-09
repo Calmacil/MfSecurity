@@ -10,6 +10,7 @@ namespace Calma\Mf\Security\User;
 
 
 use Calma\Mf\Application;
+use Calma\Mf\Config;
 use Calma\Mf\PdoProvider;
 
 class DatabaseUserProvider implements UserProviderInterface
@@ -37,14 +38,18 @@ class DatabaseUserProvider implements UserProviderInterface
     public function getUser($username)
     {
         try {
-            $dbh = PdoProvider::getConnector($this->dbname);
-            $this->app->coreLogger()->addDebug("Got DBH");
+            $opt = [];
+            if (Config::get($this->app->cfile)->debug) {
+                $opt = [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION];
+            }
+
+            $dbh = PdoProvider::getConnector($this->dbname, $opt);
+
             $u = User::getByUsername($dbh, $this->tablename, $username);
-            $this->app->coreLogger()->addDebug("Got user: {u}", ['u' => print_r($u, true)]);
+
             return $u;
         } catch (\PDOException $e) {
-            $this->app->coreLogger()->error($e->getMessage());
-            $this->app->coreLogger()->error($e->getTraceAsString());
+            $this->app->coreLogger()->error("PDO Error: " . $e->getMessage());
             return false;
         }
     }
@@ -57,9 +62,15 @@ class DatabaseUserProvider implements UserProviderInterface
     public function createUser($user)
     {
         try {
-            $dbh = PdoProvider::getConnector($this->dbname);
+            $opt = [];
+            if (Config::get($this->app->cfile)->debug) {
+                $opt = [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION];
+            }
+
+            $dbh = PdoProvider::getConnector($this->dbname, $opt);
             return $user->create($dbh);
         } catch (\PDOException $e) {
+            $this->app->coreLogger()->addError("PDO Error: " . $e->getMessage());
             return false;
         }
     }
@@ -73,9 +84,15 @@ class DatabaseUserProvider implements UserProviderInterface
     public function updateUser($user)
     {
         try {
-            $dbh = PdoProvider::getConnector($this->dbname);
+            $opt = [];
+            if (Config::get($this->app->cfile)->debug) {
+                $opt = [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION];
+            }
+
+            $dbh = PdoProvider::getConnector($this->dbname, $opt);
             return $user->update($dbh);
         } catch (\PDOException $e) {
+            $this->app->coreLogger()->addError("PDO Error: " . $e->getMessage());
             return false;
         }
     }
