@@ -45,6 +45,8 @@ class SettingsUserProvider implements UserProviderInterface
 
             $this->users[$user->username] = $u;
         }
+
+        $this->app->getResponse()->registerFunctions('\Calma\Mf\Security\Twig\Functions');
     }
 
     /**
