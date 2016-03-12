@@ -134,6 +134,7 @@ class User extends DataObject
         $u = $stmt->fetch() or die(\PDO::error_get_last());
 
         if (!($u instanceof User)) {
+            var_dump($u);
             $c = get_class($u);
             throw new \RuntimeException("Could not fetch User data in the right object: $c");
         }
