@@ -126,7 +126,7 @@ class User extends DataObject
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\User\User');
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\Data\User');
 
         $stmt->bindValue(':username', $username);
         if (!$stmt->execute()) return false;
@@ -134,7 +134,6 @@ class User extends DataObject
         $u = $stmt->fetch() or die(\PDO::error_get_last());
 
         if (!($u instanceof User)) {
-            var_dump($u);
             $c = get_class($u);
             throw new \RuntimeException("Could not fetch User data in the right object: $c");
         }
