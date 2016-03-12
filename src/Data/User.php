@@ -59,7 +59,9 @@ class User extends DataObject
     public function hasCredentials($credentials)
     {
         if (is_array($this->__roles)) {
-            return in_array($credentials, $this->__roles);
+            foreach ($this->__roles as $role) {
+                if ($credentials == $role->name) return true;
+            }
         }
 
         return false;

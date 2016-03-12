@@ -53,10 +53,4 @@ class Role extends DataObject
 
         return $stmt->rowCount() ? $stmt->fetchAll() : false;
     }
-
-
-    public static function selectByUserId($user_id, $dbh = null)
-    {
-
-    }
 }
