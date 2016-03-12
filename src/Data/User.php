@@ -16,7 +16,7 @@ class User extends DataObject
 {
 
     protected $relations = [
-        "roles" => "loadRolesByUserId"
+        "Roles" => "loadRolesByUserId"
     ];
 
     /* DB fields */
@@ -28,7 +28,7 @@ class User extends DataObject
     protected $_created_at;
     protected $_updated_at;
 
-    protected $__roles;
+    protected $__Roles;
     
     /**
      * @var bool
