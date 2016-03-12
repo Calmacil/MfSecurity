@@ -149,7 +149,7 @@ class User extends DataObject
         $dbh = PdoProvider::getConnector('master');
         $stmt = $dbh->prepare($sql);
         $stmt->bindValue(':uid', $this->_user_id);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, Role);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\Data\Role');
 
         $stmt->execute();
 
