@@ -12,6 +12,7 @@ namespace Calma\Mf\Security\User;
 use Calma\Mf\Application;
 use Calma\Mf\Config;
 use Calma\Mf\PdoProvider;
+use Calma\Mf\Security\Data\User;
 
 class DatabaseUserProvider implements UserProviderInterface
 {
@@ -45,7 +46,7 @@ class DatabaseUserProvider implements UserProviderInterface
 
             $dbh = PdoProvider::getConnector($this->dbname, $opt);
 
-            $u = User::getByUsername($dbh, $this->tablename, $username);
+            $u = User::getByUsername($username, $this->tablename, $dbh);
 
             return $u;
         } catch (\PDOException $e) {
@@ -56,7 +57,7 @@ class DatabaseUserProvider implements UserProviderInterface
     
     /**
      * Creates a new user in the database and returns it's user_id
-     * @param \Calma\Mf\Security\User\User the user
+     * @param \Calma\Mf\Security\Data\User the user
      * @return mixed The identifier
      */
     public function createUser($user)
@@ -68,7 +69,7 @@ class DatabaseUserProvider implements UserProviderInterface
             }
 
             $dbh = PdoProvider::getConnector($this->dbname, $opt);
-            return $user->create($dbh);
+            return $user->create($this->tablename, $dbh);
         } catch (\PDOException $e) {
             $this->app->coreLogger()->addError("PDO Error: " . $e->getMessage());
             return false;
@@ -78,7 +79,7 @@ class DatabaseUserProvider implements UserProviderInterface
     /**
      * Updates the user. Only password and role can be updated.
      * 
-     * @param \Calma\Mf\Security\User\User $user The user
+     * @param \Calma\Mf\Security\Data\User $user The user
      * @return bool $success
      */
     public function updateUser($user)
@@ -90,7 +91,7 @@ class DatabaseUserProvider implements UserProviderInterface
             }
 
             $dbh = PdoProvider::getConnector($this->dbname, $opt);
-            return $user->update($dbh);
+            return $user->update($this->tablename, $dbh);
         } catch (\PDOException $e) {
             $this->app->coreLogger()->addError("PDO Error: " . $e->getMessage());
             return false;

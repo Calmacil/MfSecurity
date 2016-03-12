@@ -10,6 +10,7 @@ namespace Calma\Mf\Security\User;
 
 
 use Calma\Mf\Application;
+use Calma\Mf\Security\Data\User;
 
 class SettingsUserProvider implements UserProviderInterface
 {
@@ -40,8 +41,8 @@ class SettingsUserProvider implements UserProviderInterface
                 $u->salt = $user->salt;
             if (isset($user->email))
                 $u->email = $user->email;
-            if (isset($user->role))
-                $u->role = $user->role;
+            if (isset($user->roles))
+                $u->roles = $user->roles;
 
             $this->users[$user->username] = $u;
         }

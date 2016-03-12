@@ -6,23 +6,29 @@
  * @licence MIT
  */
 
-namespace Calma\Mf\Security\User;
+namespace Calma\Mf\Security\Data;
 
 
-use Calma\Mf\Config;
 use Calma\Mf\DataObject;
+use Calma\Mf\PdoProvider;
 
 class User extends DataObject
 {
+
+    protected $relations = [
+        "roles" => "loadRolesByUserId"
+    ];
+
     /* DB fields */
     protected $_user_id;
     protected $_username;
     protected $_password;
     protected $_salt;
     protected $_email;
-    protected $_role;
     protected $_created_at;
     protected $_updated_at;
+
+    protected $__roles;
     
     /**
      * @var bool
@@ -52,12 +58,8 @@ class User extends DataObject
      */
     public function hasCredentials($credentials)
     {
-        if (is_string($credentials)) {
-            return ($this->_role === $credentials);
-        }
-
-        if (is_array($credentials)) {
-            return in_array($this->_role, $credentials);
+        if (is_array($this->__roles)) {
+            return in_array($credentials, $this->__roles);
         }
 
         return false;
@@ -67,12 +69,12 @@ class User extends DataObject
      * @param \PDO $dbh
      * @return bool
      */
-    public function create($dbh)
+    public function create($tablename = 'users', $dbh=null)
     {
-        $tablename = Config::get('settings')->security->tablename;
+        $dbh = $dbh ? : PdoProvider::getConnector('master');
 
-        $query = "INSERT INTO $tablename (`username`, `password`, `salt`, `role`, `created_at`)
-                VALUES (:uname, :pwd, :salt, :role, CURRENT_TIME)";
+        $query = "INSERT INTO `$tablename` (`username`, `password`, `salt`, `created_at`)
+                VALUES (:uname, :pwd, :salt, CURRENT_TIME)";
 
         $stmt = $dbh->prepare($query);
 
@@ -92,16 +94,16 @@ class User extends DataObject
      * @param \PDO $dbh
      * @return mixed
      */
-    public function update($dbh)
+    public function update($tablename = 'users', $dbh = null)
     {
-        $tablename = Config::get('settings')->security->tablename;
-        $query = "UPDATE $tablename SET
-                `password` = :pwd, `role` = :role `updated_at` = CURRENT_TIME
+        $dbh = $dbh ? : PdoProvider::getConnector('master');
+
+        $query = "UPDATE `$tablename` SET
+                `password` = :pwd, `updated_at` = CURRENT_TIME
                 WHERE `user_id` = :uid";
         $stmt = $dbh->prepare($query);
 
         $stmt->bindValue(':uname', $this->username);
-        $stmt->bindValue(':role', $this->role);
         $stmt->bindValue(':uid', $this->user_id);
 
         return $stmt->execute();
@@ -113,10 +115,12 @@ class User extends DataObject
      * @param string $username
      * @return User
      */
-    public static function getByUsername($dbh, $tableName, $username)
+    public static function getByUsername($username, $tablename='users', $dbh = null)
     {
-        $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `role`, `created_at`, `updated_at`
-                FROM $tableName
+        $dbh = $dbh ? : PdoProvider::getConnector('master');
+
+        $query = "SELECT `user_id`, `username`, `password`, `salt`, `email`, `created_at`, `updated_at`
+                FROM `$tablename`
                 WHERE `username` = :username";
 
         $stmt = $dbh->prepare($query);
@@ -133,5 +137,20 @@ class User extends DataObject
         }
 
         return $u;
+    }
+
+    protected function loadRolesByUserId()
+    {
+        $sql = "SELECT `role_id`, `name` FROM `role` WHERE `role_id` IN
+            (SELECT `role_id` FROM `users_roles` WHERE `user_id` = :uid";
+
+        $dbh = PdoProvider::getConnector('master');
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindValue(':uid', $this->_user_id);
+        $stmt->setFetchMode(\PDO::FETCH_CLASS, Role);
+
+        $stmt->execute();
+
+        return $stmt->rowCount() ? $stmt->fetchAll() : false;
     }
 }

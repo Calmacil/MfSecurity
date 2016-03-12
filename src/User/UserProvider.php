@@ -67,7 +67,7 @@ class UserProvider implements UserProviderInterface
 
     /**
      * @param string $username
-     * @return \Calma\Mf\Security\User\User
+     * @return \Calma\Mf\Security\Data\User
      */
     public function getUser($username)
     {
@@ -75,7 +75,7 @@ class UserProvider implements UserProviderInterface
     }
     
     /**
-     * @param \Calma\Mf\Security\User\User $user
+     * @param \Calma\Mf\Security\Data\User $user
      * @return mixed
      */
     public function createUser($user)
@@ -84,7 +84,7 @@ class UserProvider implements UserProviderInterface
     }
     
     /**
-     * @param \Calma\Mf\Security\User\User $user The user
+     * @param \Calma\Mf\Security\Data\User $user The user
      * @return bool
      */
     public function updateUser($user)
