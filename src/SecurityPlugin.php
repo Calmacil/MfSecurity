@@ -132,6 +132,8 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
      */
     public function hasCredentials($user, $credentials)
     {
+        $roles = $user->Roles;
+        $this->app->coreLogger()->debug("Roles for user: [". print_r($roles, true) . "]");
         return $user->hasCredentials($credentials);
     }
     
