@@ -132,9 +132,7 @@ class SecurityPlugin implements PluginInterface, PluginStartInterface, PluginBef
      */
     public function hasCredentials($user, $credentials)
     {
-        $roles = $user->Roles;
-        var_dump($roles);
-        exit;
+        //$roles = $user->Roles;
         return $user->hasCredentials($credentials);
     }
     
