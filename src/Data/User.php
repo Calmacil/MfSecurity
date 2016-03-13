@@ -157,7 +157,7 @@ class User extends DataObject
 
             $rs = $stmt->execute();
             if (!($rs && $stmt->rowCount())) {
-                var_dump($stmt->rowCount());
+                var_dump($rs);
                 return false;
             }
         } catch (\PDOException $e) {
