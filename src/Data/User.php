@@ -148,13 +148,20 @@ class User extends DataObject
         $sql = "SELECT `role_id`, `name` FROM `role` WHERE `role_id` IN
             (SELECT `role_id` FROM `users_roles` WHERE `user_id` = :uid";
 
-        $dbh = PdoProvider::getConnector('master');
-        $stmt = $dbh->prepare($sql);
-        $stmt->bindValue(':uid', $this->_user_id);
-        $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\Data\Role');
+        try {
+            $dbh = PdoProvider::getConnector('master');
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindValue(':uid', $this->_user_id);
+            $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\Data\Role');
 
-        $stmt->execute();
 
-        return $stmt->rowCount() ? $stmt->fetchAll() : false;
+            if (!($stmt->execute() && $stmt->rowCount())) {
+                return false;
+            }
+        } catch (\PDOException $e) {
+            var_dump($e);
+        }
+
+        return $stmt->fetchAll();
     }
 }
