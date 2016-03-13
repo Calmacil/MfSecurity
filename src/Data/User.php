@@ -155,7 +155,9 @@ class User extends DataObject
             $stmt->setFetchMode(\PDO::FETCH_CLASS, '\Calma\Mf\Security\Data\Role');
 
 
-            if (!($stmt->execute() && $stmt->rowCount())) {
+            $rs = $stmt->execute();
+            if (!($rs && $stmt->rowCount())) {
+                echo "OOPS";
                 return false;
             }
         } catch (\PDOException $e) {
