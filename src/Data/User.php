@@ -145,8 +145,8 @@ class User extends DataObject
 
     protected function loadRolesByUserId()
     {
-        $sql = "SELECT `role_id`, `name` FROM `role` WHERE `role_id` IN
-            (SELECT `role_id` FROM `users_roles` WHERE `user_id` = :uid";
+        $sql = "SELECT `role_id`, `name` FROM `role` WHERE `role_id` IN
+            (SELECT `role_id` FROM `users_roles` WHERE `user_id` = :uid)";
 
         try {
             $dbh = PdoProvider::getConnector('master');
